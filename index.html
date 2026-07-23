@@ -83,6 +83,7 @@
   .tag.master{color:var(--master);background:var(--master-bg)}
   .tag.client{color:var(--client);background:var(--client-bg)}
   .tag.street{color:var(--street);background:var(--street-bg)}
+  .tag.admin{color:#5b4b8a;background:#efeaf7}
   .tag.date{color:var(--muted);background:#f3f3f3}
   .empty{text-align:center;color:var(--muted);padding:80px 0;font-size:15px}
 
@@ -123,6 +124,11 @@
   .buyers button.sel[data-b=master]{background:var(--master-bg);border-color:var(--master);color:var(--master)}
   .buyers button.sel[data-b=client]{background:var(--client-bg);border-color:var(--client);color:var(--client)}
   .buyers button.sel[data-b=street]{background:var(--street-bg);border-color:var(--street);color:var(--street)}
+  .admins{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .admins button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 6px;font-size:13px;
+    font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;color:var(--ink)}
+  .admins button:hover{border-color:#cfcfcf}
+  .admins button.sel{background:#efeaf7;border-color:#5b4b8a;color:#5b4b8a}
   .modal .row{display:flex;gap:10px;margin-top:6px}
   .modal .row .primary{flex:1;background:var(--accent);color:#fff;border:none;padding:13px;border-radius:11px;
     font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
@@ -244,6 +250,15 @@
           <button type="button" data-b="street">Человек с улицы</button>
         </div>
       </div>
+      <div class="field">
+        <label>Администратор (кто продал)</label>
+        <div class="admins" id="mAdmins">
+          <button type="button" data-a="Вика">Вика</button>
+          <button type="button" data-a="Камила">Камила</button>
+          <button type="button" data-a="Света">Света</button>
+          <button type="button" data-a="Настя">Настя</button>
+        </div>
+      </div>
       <div class="row">
         <button class="primary" id="mSave">Сохранить покупку</button>
         <button class="del hidden" id="mDelete">Отменить</button>
@@ -328,6 +343,7 @@ function card(i, showBuyer){
   let tags='';
   if(p && showBuyer){
     tags='<div class="tags"><span class="tag '+p.buyer+'">'+BUYERS[p.buyer]+'</span>'+
+         (p.admin?'<span class="tag admin">'+p.admin+'</span>':'')+
          (p.date?'<span class="tag date">'+ruDate(p.date)+'</span>':'')+'</div>';
   }
   el.innerHTML=
@@ -390,7 +406,7 @@ function renderBought(){
 }
 
 /* ---------- modal ---------- */
-let current=null, selBuyer=null;
+let current=null, selBuyer=null, selAdmin=null;
 const overlay=document.getElementById('overlay');
 function openModal(i){
   current=i;
@@ -402,7 +418,9 @@ function openModal(i){
   document.getElementById('mTitle').textContent=p?'Покупка отмечена':'Отметить покупку';
   document.getElementById('mDate').value=p?p.date:todayISO();
   selBuyer=p?p.buyer:null;
+  selAdmin=p?(p.admin||null):null;
   document.querySelectorAll('#mBuyers button').forEach(b=>b.classList.toggle('sel',b.dataset.b===selBuyer));
+  document.querySelectorAll('#mAdmins button').forEach(b=>b.classList.toggle('sel',b.dataset.a===selAdmin));
   document.getElementById('mDelete').classList.toggle('hidden', !p);
   document.getElementById('mSave').textContent=p?'Сохранить изменения':'Сохранить покупку';
   overlay.classList.add('open');
@@ -415,12 +433,17 @@ document.querySelectorAll('#mBuyers button').forEach(b=>b.onclick=()=>{
   selBuyer=b.dataset.b;
   document.querySelectorAll('#mBuyers button').forEach(x=>x.classList.toggle('sel',x===b));
 });
+document.querySelectorAll('#mAdmins button').forEach(b=>b.onclick=()=>{
+  selAdmin=b.dataset.a;
+  document.querySelectorAll('#mAdmins button').forEach(x=>x.classList.toggle('sel',x===b));
+});
 document.getElementById('mSave').onclick=()=>{
   if(!current) return;
   const date=document.getElementById('mDate').value;
   if(!date){toast('Укажите дату покупки');return;}
   if(!selBuyer){toast('Выберите, кто купил');return;}
-  purchases[current.id]={date, buyer:selBuyer};
+  if(!selAdmin){toast('Выберите администратора');return;}
+  purchases[current.id]={date, buyer:selBuyer, admin:selAdmin};
   persist(); closeModal(); render();
   toast('Отмечено: куплено');
 };
