@@ -274,7 +274,7 @@ function persist(){ localStorage.setItem(LS_KEY, JSON.stringify(purchases)); }
 
 let view='catalog';
 let cat={sup:'all', q:'', sort:'default'};
-let bought={buyer:'all', from:'', to:''};
+let bought={sup:'all', from:'', to:''};
 
 const fmt = n => n.toLocaleString('ru-RU');
 const imgUrl = id => 'https://lh3.googleusercontent.com/d/'+id+'=w600';
@@ -307,11 +307,11 @@ document.getElementById('sort').addEventListener('change',e=>{cat.sort=e.target.
 
 /* ---------- bought filters ---------- */
 const buyerFilters=document.getElementById('buyerFilters');
-[['all','Все'],['master','Мастер'],['client','Клиент мастера'],['street','Человек с улицы']].forEach(([k,name])=>{
+[['all','Все'],['aida','Аида'],['evgenia','Евгения'],['nashe','Наше · AliExpress']].forEach(([k,name])=>{
   const b=document.createElement('button');
   b.className='chip'+(k==='all'?' active':''); b.dataset.key=k;
   b.innerHTML=name+' <span class="n" data-c="'+k+'">0</span>';
-  b.onclick=()=>{bought.buyer=k;[...buyerFilters.children].forEach(c=>c.classList.toggle('active',c.dataset.key===k));render();};
+  b.onclick=()=>{bought.sup=k;[...buyerFilters.children].forEach(c=>c.classList.toggle('active',c.dataset.key===k));render();};
   buyerFilters.appendChild(b);
 });
 document.getElementById('dateFrom').addEventListener('change',e=>{bought.from=e.target.value;render();});
@@ -359,13 +359,13 @@ function renderCatalog(){
 
 function renderBought(){
   const all=Object.entries(purchases).map(([id,p])=>({item:byId[id],p})).filter(x=>x.item);
-  // update buyer counts
-  const c={all:all.length,master:0,client:0,street:0};
-  all.forEach(x=>c[x.p.buyer]=(c[x.p.buyer]||0)+1);
+  // update supplier counts among purchased
+  const c={all:all.length,aida:0,evgenia:0,nashe:0};
+  all.forEach(x=>c[x.item.sup]=(c[x.item.sup]||0)+1);
   document.querySelectorAll('[data-c]').forEach(n=>n.textContent=c[n.dataset.c]||0);
 
   let list=all.filter(x=>
-    (bought.buyer==='all'||x.p.buyer===bought.buyer) &&
+    (bought.sup==='all'||x.item.sup===bought.sup) &&
     (!bought.from || (x.p.date && x.p.date>=bought.from)) &&
     (!bought.to   || (x.p.date && x.p.date<=bought.to)));
   list.sort((a,b)=>(b.p.date||'').localeCompare(a.p.date||''));
