@@ -8,72 +8,147 @@
   :root{
     --bg:#ffffff; --ink:#141414; --muted:#8a8a8a; --line:#ececec;
     --accent:#1f7a54; --accent-soft:#eef6f1; --card:#fff; --shadow:0 1px 2px rgba(0,0,0,.04);
+    --master:#1f7a54; --master-bg:#eef6f1;
+    --client:#2563a8; --client-bg:#eaf1f9;
+    --street:#b9761a; --street-bg:#faf1e4;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
-    color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased;
-    line-height:1.5;
+    color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; line-height:1.5;
   }
   .wrap{max-width:1240px;margin:0 auto;padding:0 20px}
 
-  header{padding:46px 0 26px;border-bottom:1px solid var(--line)}
+  header{padding:40px 0 22px;border-bottom:1px solid var(--line)}
   .brand{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
-  h1{font-size:clamp(30px,5vw,46px);font-weight:600;letter-spacing:-.01em;margin:0}
+  h1{font-size:clamp(28px,5vw,44px);font-weight:600;letter-spacing:-.01em;margin:0}
   .sub{color:var(--muted);margin:12px 0 0;font-size:15px;max-width:640px}
 
-  .controls{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);
-    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:16px 0}
-  .controls .wrap{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  /* top tabs */
+  .tabs{display:flex;gap:6px;margin-top:22px}
+  .tab{border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 18px;
+    border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;display:flex;gap:8px;align-items:center}
+  .tab:hover{border-color:#cfcfcf}
+  .tab.active{background:var(--ink);border-color:var(--ink);color:#fff}
+  .tab .n{font-size:12px;font-weight:600;background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px}
+  .tab.active .n{background:rgba(255,255,255,.25)}
+
+  .controls{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.93);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:14px 0}
+  .controls .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
   .filters{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{border:1px solid var(--line);background:#fff;color:var(--ink);
-    padding:9px 15px;border-radius:999px;font-size:13.5px;cursor:pointer;
-    transition:.15s;white-space:nowrap;font-weight:500}
+  .chip{border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 15px;border-radius:999px;
+    font-size:13.5px;cursor:pointer;transition:.15s;white-space:nowrap;font-weight:500}
   .chip:hover{border-color:#cfcfcf}
   .chip .n{color:var(--muted);margin-left:6px;font-size:12px}
   .chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
   .chip.active .n{color:rgba(255,255,255,.6)}
   .spacer{flex:1 1 auto}
-  .search{position:relative;flex:0 1 260px;min-width:180px}
-  .search input{width:100%;padding:10px 14px 10px 38px;border:1px solid var(--line);
-    border-radius:999px;font-size:14px;outline:none;transition:.15s;font-family:inherit}
+  .search{position:relative;flex:0 1 240px;min-width:170px}
+  .search input{width:100%;padding:10px 14px 10px 38px;border:1px solid var(--line);border-radius:999px;
+    font-size:14px;outline:none;transition:.15s;font-family:inherit}
   .search input:focus{border-color:var(--accent)}
   .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.45}
-  select{padding:10px 14px;border:1px solid var(--line);border-radius:999px;
-    font-size:14px;background:#fff;cursor:pointer;outline:none;font-family:inherit;color:var(--ink)}
-  select:focus{border-color:var(--accent)}
+  select,input[type=date]{padding:9px 12px;border:1px solid var(--line);border-radius:999px;font-size:14px;
+    background:#fff;cursor:pointer;outline:none;font-family:inherit;color:var(--ink)}
+  select:focus,input[type=date]:focus{border-color:var(--accent)}
+  .dates{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+  .btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 14px;border-radius:999px;
+    font-size:13.5px;cursor:pointer;font-weight:500;transition:.15s;font-family:inherit}
+  .btn:hover{border-color:#cfcfcf}
+  .btn.ghost{color:var(--muted)}
 
   .meta{color:var(--muted);font-size:13px;padding:18px 0 4px}
   .meta b{color:var(--ink);font-weight:600}
 
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
-    gap:22px 20px;padding:14px 0 70px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
-    overflow:hidden;display:flex;flex-direction:column;transition:.18s;box-shadow:var(--shadow)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px 20px;padding:14px 0 70px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    display:flex;flex-direction:column;transition:.18s;box-shadow:var(--shadow);cursor:pointer;position:relative}
   .card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.09);border-color:#e2e2e2}
+  .card.bought{border-color:var(--accent)}
   .ph{position:relative;aspect-ratio:1/1;background:#f6f6f6;overflow:hidden}
   .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:.4s}
   .card:hover .ph img{transform:scale(1.04)}
-  .badge{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.94);
-    backdrop-filter:blur(4px);color:var(--ink);font-size:11px;font-weight:600;
-    letter-spacing:.02em;padding:5px 10px;border-radius:999px}
+  .badge{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.94);backdrop-filter:blur(4px);
+    color:var(--ink);font-size:11px;font-weight:600;letter-spacing:.02em;padding:5px 10px;border-radius:999px}
+  .sold{position:absolute;top:10px;right:10px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;
+    padding:5px 10px;border-radius:999px;display:flex;gap:5px;align-items:center;box-shadow:0 2px 8px rgba(31,122,84,.35)}
   .body{padding:14px 15px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
   .price{font-size:19px;font-weight:600;letter-spacing:-.01em}
   .price span{font-size:14px;font-weight:500;color:var(--muted)}
   .desc{font-size:13.5px;color:#3d3d3d;margin:0}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+  .tag{font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:999px}
+  .tag.master{color:var(--master);background:var(--master-bg)}
+  .tag.client{color:var(--client);background:var(--client-bg)}
+  .tag.street{color:var(--street);background:var(--street-bg)}
+  .tag.date{color:var(--muted);background:#f3f3f3}
   .empty{text-align:center;color:var(--muted);padding:80px 0;font-size:15px}
 
+  /* bought summary */
+  .summary{display:flex;flex-wrap:wrap;gap:26px;padding:20px 22px;border:1px solid var(--line);
+    border-radius:14px;margin:16px 0 2px;background:#fafafa}
+  .summary .s{display:flex;flex-direction:column;gap:2px}
+  .summary .s .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .summary .s .v{font-size:24px;font-weight:600}
+  .summary .actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+
   footer{border-top:1px solid var(--line);padding:26px 0 60px;color:var(--muted);font-size:12.5px}
+  footer a{color:var(--muted)}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(20,20,20,.5);backdrop-filter:blur(3px);z-index:100;
+    display:none;align-items:center;justify-content:center;padding:20px}
+  .overlay.open{display:flex}
+  .modal{background:#fff;border-radius:18px;max-width:460px;width:100%;overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.35);animation:pop .18s ease}
+  @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal .top{display:flex;gap:14px;padding:16px;border-bottom:1px solid var(--line)}
+  .modal .top img{width:88px;height:88px;border-radius:12px;object-fit:cover;background:#f2f2f2;flex:none}
+  .modal .top .info{min-width:0}
+  .modal .top .p{font-size:20px;font-weight:600}
+  .modal .top .p span{font-size:14px;color:var(--muted);font-weight:500}
+  .modal .top .d{font-size:13px;color:#444;margin-top:3px}
+  .modal .top .s{font-size:11px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+  .modal .form{padding:18px 16px}
+  .modal h3{margin:0 0 14px;font-size:15px;font-weight:600}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:7px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+  .field input[type=date]{width:100%;border-radius:10px;cursor:text}
+  .buyers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .buyers button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 6px;font-size:12.5px;
+    font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;color:var(--ink);line-height:1.25}
+  .buyers button:hover{border-color:#cfcfcf}
+  .buyers button.sel[data-b=master]{background:var(--master-bg);border-color:var(--master);color:var(--master)}
+  .buyers button.sel[data-b=client]{background:var(--client-bg);border-color:var(--client);color:var(--client)}
+  .buyers button.sel[data-b=street]{background:var(--street-bg);border-color:var(--street);color:var(--street)}
+  .modal .row{display:flex;gap:10px;margin-top:6px}
+  .modal .row .primary{flex:1;background:var(--accent);color:#fff;border:none;padding:13px;border-radius:11px;
+    font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
+  .modal .row .primary:hover{background:#186344}
+  .modal .row .del{background:#fff;color:#c0392b;border:1px solid #f0d5d1;padding:13px 16px;border-radius:11px;
+    font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+  .modal .row .del:hover{background:#fdf2f0}
+  .xbtn{position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;line-height:1}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-size:14px;z-index:200;
+    transition:.25s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .hidden{display:none!important}
 
   @media(max-width:600px){
     .grid{grid-template-columns:repeat(2,1fr);gap:14px}
-    header{padding:34px 0 20px}
+    header{padding:30px 0 18px}
     .search{flex-basis:100%;order:5}
     .body{padding:11px 12px 13px}
     .price{font-size:16px}
     .desc{font-size:12.5px}
     .wrap{padding:0 14px}
+    .summary{gap:16px 22px;padding:16px}
+    .summary .actions{margin-left:0;flex-basis:100%}
+    .buyers button{font-size:11.5px}
   }
 </style>
 </head>
@@ -82,11 +157,16 @@
   <div class="wrap">
     <p class="brand">bb20a · beauty bar</p>
     <h1>Украшения</h1>
-    <p class="sub">Каталог из 210 позиций от трёх поставщиков. Фото · цена · описание. Фильтр по поставщику, поиск и сортировка по цене.</p>
+    <p class="sub">Каталог из 210 позиций. Нажмите на украшение, чтобы отметить покупку — дату и покупателя. Всё отмеченное собирается в разделе «Купленное».</p>
+    <div class="tabs">
+      <button class="tab active" data-view="catalog">Каталог</button>
+      <button class="tab" data-view="bought">Купленное <span class="n" id="boughtCount">0</span></button>
+    </div>
   </div>
 </header>
 
-<div class="controls">
+<!-- CATALOG controls -->
+<div class="controls" id="catControls">
   <div class="wrap">
     <div class="filters" id="filters"></div>
     <div class="spacer"></div>
@@ -102,74 +182,289 @@
   </div>
 </div>
 
+<!-- BOUGHT controls -->
+<div class="controls hidden" id="boughtControls">
+  <div class="wrap">
+    <div class="filters" id="buyerFilters"></div>
+    <div class="spacer"></div>
+    <div class="dates">
+      <span>Период:</span>
+      <input type="date" id="dateFrom" title="Дата с">
+      <span>—</span>
+      <input type="date" id="dateTo" title="Дата по">
+      <button class="btn ghost" id="dateReset">Сбросить</button>
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
-  <div class="meta" id="meta"></div>
-  <div class="grid" id="grid"></div>
-  <div class="empty" id="empty" style="display:none">Ничего не найдено — измените запрос или фильтр.</div>
+  <!-- CATALOG view -->
+  <div id="catalogView">
+    <div class="meta" id="meta"></div>
+    <div class="grid" id="grid"></div>
+    <div class="empty hidden" id="empty">Ничего не найдено — измените запрос или фильтр.</div>
+  </div>
+
+  <!-- BOUGHT view -->
+  <div id="boughtView" class="hidden">
+    <div class="summary" id="summary"></div>
+    <div class="meta" id="boughtMeta"></div>
+    <div class="grid" id="boughtGrid"></div>
+    <div class="empty hidden" id="boughtEmpty">Пока ничего не отмечено куплено. Откройте «Каталог» и нажмите на украшение.</div>
+  </div>
 </div>
 
 <footer>
-  <div class="wrap">Каталог украшений · собран автоматически · фото хранятся на Google&nbsp;Drive.</div>
+  <div class="wrap">Каталог украшений · отметки о покупках хранятся в этом браузере. Делайте бэкап кнопкой «Скачать данные» в разделе «Купленное».</div>
 </footer>
+
+<!-- purchase modal -->
+<div class="overlay" id="overlay">
+  <div class="modal" style="position:relative">
+    <button class="xbtn" id="modalClose">&times;</button>
+    <div class="top">
+      <img id="mImg" src="" alt="">
+      <div class="info">
+        <div class="p" id="mPrice"></div>
+        <div class="d" id="mDesc"></div>
+        <div class="s" id="mSup"></div>
+      </div>
+    </div>
+    <div class="form">
+      <h3 id="mTitle">Отметить покупку</h3>
+      <div class="field">
+        <label>Дата покупки</label>
+        <input type="date" id="mDate">
+      </div>
+      <div class="field">
+        <label>Кто купил</label>
+        <div class="buyers" id="mBuyers">
+          <button type="button" data-b="master">Мастер</button>
+          <button type="button" data-b="client">Клиент мастера</button>
+          <button type="button" data-b="street">Человек с улицы</button>
+        </div>
+      </div>
+      <div class="row">
+        <button class="primary" id="mSave">Сохранить покупку</button>
+        <button class="del hidden" id="mDelete">Отменить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="importFile" accept="application/json" class="hidden">
+<div class="toast" id="toast"></div>
 
 <script>
 const ITEMS = [{"id": "1gDJAxDm_LuVCr62A1gWE82iWSZEZqe5J", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Кольцо с крупным перламутровым камнем закрученной формы в золотистой оправе"}, {"id": "1WaiBvB82Zmyb0QRfS9c1rV79wrPtE1jr", "sup": "aida", "supName": "Аида", "price": 2700, "desc": "Кольцо-камея с женским профилем в серебре со стразами"}, {"id": "11yB3soTEi6TxL9vcgLIJEs9pT3x310vk", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Ажурное кольцо-шар золотистое с перламутровыми камнями внутри"}, {"id": "1V7rL1JLaU4oHn5Qxq38XDV63Thzc4KAD", "sup": "aida", "supName": "Аида", "price": 1400, "desc": "Кольцо с квадратным жёлтым кристаллом в обрамлении страз"}, {"id": "1i5B1edhdY1c3Oo9Ab1ySfnSvKoNqdY4U", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Тонкое кольцо-дорожка с мелкими прозрачными камнями"}, {"id": "1AfyDuX0AvCmV4r9IeAqySVdrg8C_HMsK", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Кольцо в виде снежинки из страз, серебро"}, {"id": "1BrVjVWDEuRM-FdBRHtj7XJ_yeycKquel", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Кольцо с крупным круглым голубым камнем в фигурной золотистой оправе"}, {"id": "19MdSVBUhgB6lkt-s1RHMxNWvSgzo97iV", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Широкое кольцо-купол, сплошь в мелких стразах"}, {"id": "15v-E_7vVJg8V_sY-4GlLffYOc1NVXqq1", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Кольцо с овальным камнем и декором-кометой из страз"}, {"id": "1mu8ZnIPZr9qG-1zecsh4KTe--_qxiyba", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Кольцо-дорожка по всему ободку в стразах"}, {"id": "1bdC1Z2EHPkerR9zxYXJ3AtZ9t3prBwsC", "sup": "aida", "supName": "Аида", "price": 2700, "desc": "Тонкое разомкнутое кольцо с круглым камнем"}, {"id": "1KkhJfk2B11vLY-47VOYE0BUVtSGUPl42", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Кольцо с тремя круглыми камнями в ряд"}, {"id": "1lLMLF7n08eCIIPlPOQDg5qv1WJzWXbVM", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Кольцо с дорожкой из круглых камней"}, {"id": "1KgguJw3mySkMy9OU4k5aEwX4ziE0ub7l", "sup": "aida", "supName": "Аида", "price": 2700, "desc": "Тонкое кольцо с круглым камнем в ореоле из страз"}, {"id": "19uvbmyovN1yZZ6AfdvO7RJQouSA4K3GT", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Тонкое кольцо-дорожка с мелкими камнями"}, {"id": "1us4JFiiMtfmV2oNBD8uiEAmBP7__3nXX", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Кольцо с жемчужинами и стразами"}, {"id": "1Vo3FXoQ1BYloAiSF2Qi7uE-7oiV3TFuP", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Широкое кольцо в два ряда камней"}, {"id": "1gpeYs1SETCmLYpKwCgi81diNdXlpa0j3", "sup": "aida", "supName": "Аида", "price": 1300, "desc": "Кольцо с крупным розовым каплевидным кристаллом"}, {"id": "1zaG_PlqLl2bwzgtSaODC0WXyxz9sZhk3", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Кольцо-дорожка с прозрачными и чёрным камнями"}, {"id": "1B6gKe62GhGza7s2RJdNi-KYiWcUk5BD_", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Золотистое кольцо с двумя звёздами-кометами"}, {"id": "1iRIEQ_7MovhUIftY00Ck512KlCMamWph", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Золотистое кольцо волнистой формы с камнем"}, {"id": "11JdycCATD6JM0klMUOAYU9H04-vZ976R", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Кольцо с жемчужинами и розовыми камнями"}, {"id": "1TinIRzfKiToJ1tQpis8vxUCSb_AwEqjB", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги-каффы спиральные, дорожки из страз"}, {"id": "1vpdTUQsCIUVvA4W1BQXYreOesbpYUaww", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги-кольца (хугги) со стразами"}, {"id": "10sjetTb4tMIvuYfILUNgdHgEGTlj2pU5", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Широкий кафф в сиреневых стразах"}, {"id": "1vxbA1ipmTwe9wp3pIm9wVB42giFfQFIs", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Подвеска в форме перекрещённого креста из страз"}, {"id": "18Qmq3e91AImVrZnFysrcMOBXBnmcYmWs", "sup": "aida", "supName": "Аида", "price": 1700, "desc": "Чокер из чёрных бусин с сердечком из страз"}, {"id": "1tvs-qWCaAS_6qtTnxiSdap2zZlifH7QO", "sup": "aida", "supName": "Аида", "price": 1000, "desc": "Тонкий жёсткий чокер-обруч, серебро"}, {"id": "1DMBl0uWUUq4xXuo7yzWaInxcXBKCCVlE", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Тонкая цепочка с небольшой подвеской"}, {"id": "19xoXBZflRWzpeP1bSkuBMNR_Mip7WaEq", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Колье с розовыми сердечками-эмаль и камнями"}, {"id": "1klVK7H__jy59NyezhFNvbP9y3xD1_7Hg", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Тонкая цепочка с подвеской-сердечком"}, {"id": "1_2ukh_2vSoLttKOqWCc4BDVC_mWdwz2s", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Двойная цепочка с миниатюрной подвеской"}, {"id": "1b3kgBvPSyCvrpSf67T3Sbu_P_4OTFTAz", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Тонкая цепочка с круглой подвеской-кольцом"}, {"id": "1auSZFwn3cZPY6hwqPzi-LTG687xOnY0g", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Тонкая цепочка с подвеской-сердечком (контур)"}, {"id": "1e6TbWK0VopRmTY5XPi36su4oioZ0X8kB", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Тонкая цепочка с подвеской-круг"}, {"id": "1kP-3z3x1cHHoUnyQXx68LsxRtzIoIqVT", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Тонкая цепочка с мелкой подвеской"}, {"id": "1IXccmvwSHu5hyFvinTnNBM43wxYkRsRy", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Тонкая цепочка с подвеской-звёздочкой"}, {"id": "1d-VmkkhmLlyoT9VA4nHYiPDstEfzPgPF", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Цепочка-лариат с сердечком из страз"}, {"id": "1ATAl_xNgPcBRVfgNsFJ4rYjtnvyCaX8E", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Цепочка с круглой подвеской-камнем в ореоле"}, {"id": "1cU54VOPruSSpmEB1lINpiVmOXliZbs7m", "sup": "aida", "supName": "Аида", "price": 3000, "desc": "Длинное колье-сотуар с голубыми бусинами"}, {"id": "12tyn_QfrxxEvqvSVL3XATbLAOwY3WzFU", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Цепочка с подвеской-бесконечностью"}, {"id": "1gNl3gvlhx01H02dWoLvLNiifj91dTiiB", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Цепочка с крестом из разноцветных камней"}, {"id": "1PUNeYDY1jNZ_ZeXOzjlbuHYafd1TnX5o", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Цепочка с сердечком из сиреневых камней"}, {"id": "14NeIDetXPEe4KLDs2J5UUcm7HnK20tjC", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Тонкая цепочка с овальной подвеской"}, {"id": "1ukxwgfygtFR2cI4UDB7jOZ9L8pVR3meh", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Цепочка с подвеской из двух колец в стразах"}, {"id": "1WM18gi-vkQgnHZ70yGUGnG4vkzmg2P-8", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Цепочка с миниатюрной подвеской"}, {"id": "1jE8EFzzkptlFJZ3xnGYIRAIA1R93q85W", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Золотой чокер-обруч с фигурной подвеской"}, {"id": "1dwPK6LBFLTLZBHFgfvHvd0uoLUjDeMd6", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Золотое кольцо-обруч с крупной жемчужиной"}, {"id": "1CZKABD40SNiZSArY4WAreu-kMdAghx7B", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Длинные серьги-кисти из цепочек"}, {"id": "1EyyPMVgeMd35SYi3_RojjupcrUMdMFl0", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Колье с круглой подвеской-камнем"}, {"id": "15lUhsEJ8S4PhZUP9D2cOwrdwy9L4bKsd", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Серьги-кольца многослойные, серебро"}, {"id": "1Uutg4gSW7PigILmGilfbmImg2W-ATjbf", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги-шары перламутровые сиреневые"}, {"id": "14ZxTIgNHSOHHD3PbATNPK37XcvuT7exM", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Набор пусетов с чёрными камнями"}, {"id": "1V1wHmOYMz845C2T-9yEieV0KjBcwq8F0", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Набор пусетов со стразами"}, {"id": "1eGitKlX0Bl_E-_XHH1umNJJrRCnFC6bE", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Серьги-полукольца золотые, плетёная фактура"}, {"id": "18jJ2s5gTzekTAeepYyS22Lr0v4Ue2zAX", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Серьги-ромбы с синими кристаллами"}, {"id": "1wbYpGfXNTcAf5AG8hqk6ewKxrhiiKjQn", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Серьги-пусеты купол в стразах"}, {"id": "1RBHdBFwcKcUI6SemueBrdFo6oae27njR", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Серьги-сердечки в стразах"}, {"id": "1pP5nAkp77cqmBhF-PNp0qtLloyLx4VQE", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Серьги-камеи в жемчужном ободке"}, {"id": "1EGRNk39xIgtYexoIlgsP0qE2oHzJ_yN7", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Серьги перламутровые с золотой пчёлкой"}, {"id": "105sOQeKtvSJBKJ0edBFW6D-dSlLhDHQP", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги-капли перламутровые крупные"}, {"id": "1hve_3OJjHCML7cl_A1Lz19AVzRlGzzX3", "sup": "aida", "supName": "Аида", "price": 1000, "desc": "Серьги-цветок со стразами и жемчужиной"}, {"id": "12GADYXF5WPCbI2Cj4AgdNN0l5ecChfHx", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Серьги-сердечки, сиреневый перламутр"}, {"id": "11KUH10j1HkBfqzIuPymeQWHSGeLpTSn9", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Серьги с гроздью сине-фиолетовых камней"}, {"id": "108TLDd3FxCOAR42RIyUnBzfbBBjKGqhN", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги с крупными бирюзовыми камнями"}, {"id": "1g3gKOk_ssz1KwIOpff-lueKCDlvzGYcC", "sup": "aida", "supName": "Аида", "price": 800, "desc": "Набор мелких пусетов с цветными камнями"}, {"id": "1bTRhmbt1gsa6AMBQ236L0eBFXs8ww0li", "sup": "aida", "supName": "Аида", "price": 800, "desc": "Набор пусетов со стразами"}, {"id": "1xmugYA5LC0mTgDtjB_QaoJHEZHIJyAwA", "sup": "aida", "supName": "Аида", "price": 1300, "desc": "Пусеты с жемчужинами"}, {"id": "1rPUKuq3-P2p8LXpd3gjsGCyfwiNly0LE", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Набор пусетов: глазик и стразы"}, {"id": "1kb79dh7TRjl--UesWL3MMPj9WVFGzAjR", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Серьги с голубыми камнями"}, {"id": "17ws0yLAf8Mqy0MCPPPpkE6PuqaigG-Rx", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Серьги-каффы в форме листа-колоска"}, {"id": "1jhGS6zHxVxopZxjdkLAeiJBkvI5gPoGD", "sup": "aida", "supName": "Аида", "price": 1000, "desc": "Набор пусетов-бабочек со стразами"}, {"id": "1TWfJCoF51DQ-YbtzQe_r1fG7o-1rccGb", "sup": "aida", "supName": "Аида", "price": 1000, "desc": "Брошь-булавка со стразами"}, {"id": "1pECYO-ReMbCucnJdXGKWmzbW69nIowEN", "sup": "aida", "supName": "Аида", "price": 1000, "desc": "Серьги-пусеты в форме ножниц, золото"}, {"id": "13_Lpdes8D7Q2fIkePL2YLMh4I2LC1vAZ", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Браслет крупные звенья, серебро"}, {"id": "1IM-79I-awqsiuynWuQB-xomN6RX6eIZu", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Теннисный браслет в два ряда страз"}, {"id": "1k2_CEDR068yYAW17DNvimVQFbahU9Gvh", "sup": "aida", "supName": "Аида", "price": 1300, "desc": "Браслет из золотистых бусин с бирюзой"}, {"id": "17Qx-zJZ7dBpLCzZKXuVO6eeIcl12pSG7", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Подвеска в форме лебедя, серебро"}, {"id": "1RB4l_6U5JcDnm-829ob9iKW6LhJah_N8", "sup": "aida", "supName": "Аида", "price": 1300, "desc": "Браслет из бусин с круглыми звеньями, золото"}, {"id": "1UH0t0xhE962NdH76GeF0WQWYoXqitqxj", "sup": "aida", "supName": "Аида", "price": 4000, "desc": "Браслет с крупными цветными камнями в золоте"}, {"id": "1oMo4QFhfQQLD6ymFu6gY5QH1NywkyaRt", "sup": "aida", "supName": "Аида", "price": 3000, "desc": "Браслет с разноцветными круглыми камнями, розовое золото"}, {"id": "1p0BMLMj_tAqYT5BumrenTtUVXwqtQJ1O", "sup": "aida", "supName": "Аида", "price": 4000, "desc": "Браслет с разноцветными кристаллами"}, {"id": "1ubohufEwM_pYwn2fgic4RzyOA9bXIodI", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Тонкий теннисный браслет в стразах"}, {"id": "1vrqu6rhPt_OGQE2NkWu8Qke_BLXDiPBn", "sup": "aida", "supName": "Аида", "price": 1900, "desc": "Браслет с клеверами из розового перламутра"}, {"id": "1bJmuqHjYOwCw4xDgqZefCCqqtIqlDSRh", "sup": "aida", "supName": "Аида", "price": 1900, "desc": "Браслет с клеверами (чёрный, красный, белый)"}, {"id": "1uslO09EzfjiYggGHm0xEZ1rTzzgSCjvD", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Цепочка с подвеской-глаз"}, {"id": "1XKyMH6zAqfFk4b-fn69tBKgAsStognv-", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Цепочка с подвеской из двух колец, золото"}, {"id": "1sax__5g2etYk0fe-YptfnqJbuH11rRKu", "sup": "aida", "supName": "Аида", "price": 2100, "desc": "Двойная цепочка с клеверами из страз"}, {"id": "1KjWSEsPDakiguhl5j6JPBFRa1gL-RZPL", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Цепочка с подвеской месяц и звезда"}, {"id": "1qH80ykivG41G5VtJe7347r_c4K3oUGKV", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Цепочка с сердечком, розовое золото"}, {"id": "1B9UohLm4_0adI0wcuZxkCH2XHwidGRS9", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Цепочка с сердечком в стразах"}, {"id": "1LEeojngGMZ-R-B3t5rm_fFIUOUImDGjG", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Лариат с сердечком из страз, розовое золото"}, {"id": "1uN0jr5CTw3ivu1Drf8b_FWZCUbiAsUj1", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Цепочка с круглой подвеской в стразах"}, {"id": "1ABKP5kzYr3oOyF8L7FwOPFIn3ELdIDZH", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Цепочка с миниатюрной золотой подвеской"}, {"id": "1HNmZ6C6ZfNN-2c8ivEO4wCoiJoV1_Fww", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Цепочка с подвеской-мишка в стразах"}, {"id": "1G6KrkuRVKXvcU8-ltWjtlYpP2Oe5PKez", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Цепочка с подвеской-мишка, перламутр"}, {"id": "1xXOIlcr1Km-Zu-QJ_5frUO_fwCSa_tU3", "sup": "aida", "supName": "Аида", "price": 2100, "desc": "Цепочка с квадратной подвеской-камнем"}, {"id": "1mHEtiZII5fHPuryeD2jLsFE8lgfPflQ8", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Цепочка с сердечком, красная эмаль"}, {"id": "1r0CUBEd3IiPXT9O2A8drnO1L68F7dQTj", "sup": "aida", "supName": "Аида", "price": 3000, "desc": "Ассорти золотистых подвесок-шармов"}, {"id": "1yDPzlRdPa5NEyKKyiWq-NwPcbxXXJt0W", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Цепочка с сердечком, золото"}, {"id": "1mjvMSFC5DfX0faPV7oechKzB3CcgkBGe", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Цепочка с сердечком, розовое золото"}, {"id": "1S95C0FImQX9R83_dWtQSwQalGgebGdwd", "sup": "aida", "supName": "Аида", "price": 2100, "desc": "Лариат с подвеской-кольцом, золото"}, {"id": "1NtbrvgrhIFLthwqkPM8KRozbH9-5mOC-", "sup": "aida", "supName": "Аида", "price": 5000, "desc": "Длинное колье-сотуар с чёрными и прозрачными камнями"}, {"id": "1RtOXy_vpu8-DqFVBC8qUaDOhfEM1dE24", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Серьги-грозди с розовым жемчугом и стразами"}, {"id": "1A17FOJMZ6TxQHn7jE09HVQyBdmN-rszQ", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Серьги-шары крупные золотые"}, {"id": "1WHmVYZHiwghW-Rl03oCpgcLFFeZeFa3P", "sup": "aida", "supName": "Аида", "price": 1400, "desc": "Серьги-пусеты круглые, жёлтая эмаль в золоте"}, {"id": "1WFPYhisFp2dl9eUNnr0ziTcT-5lJCd-f", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги-капли золотые, рифлёная фактура"}, {"id": "1uO7X7x5vugMHAYXUif5HXH_gwdbFcuyW", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги с голубыми кристаллами и золотой каплей"}, {"id": "1FiTv7RRaymFx2I31De3z2MUXtko9fq2Y", "sup": "aida", "supName": "Аида", "price": 3300, "desc": "Серьги-каскад из голубых кристаллов-капель"}, {"id": "1nYJLXSW6JTnPN1ZeqVaF7lyjVd3X_XcR", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги с прозрачным кристаллом и золотой каплей"}, {"id": "1kEYKb9-JOef_juaD1T8-WUFJHAVQ66U3", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Серьги-кольца из мелких страз"}, {"id": "1ysA4V8nF4Pc6gYPr_2e7Cs1XycWjd4UW", "sup": "aida", "supName": "Аида", "price": 2200, "desc": "Серьги-пусеты с зелёным камнем в ореоле"}, {"id": "1Yp6KkOW3kSfWPLuMOt7FmAmgIe92BLWX", "sup": "aida", "supName": "Аида", "price": 1600, "desc": "Серьги из переплетённых колец, серебро"}, {"id": "1UGA0hEV0dkJi5hZ6RHry4k-SVDws1LqC", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Серьги-завитки золотые"}, {"id": "1uJ5CHmUMl7-6ZXvOFSe-HrER_OeVYx1s", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Серьги с золотыми кольцами и мятным камнем"}, {"id": "1lMfxVGFzjevqOGmPHOx2fFc7t386dJe1", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги с крупным чёрным кабошоном в золоте"}, {"id": "1E_ioF-tiBLsSRHILIQ-Lo7SjK1COpHs8", "sup": "aida", "supName": "Аида", "price": 1500, "desc": "Серьги с красно-коричневым кабошоном"}, {"id": "1Gt632GOUzX-dR_ldWk_lxAK-BWFpcQRs", "sup": "aida", "supName": "Аида", "price": 1900, "desc": "Серьги-пусеты квадратный розовый кристалл"}, {"id": "1tAAYYq4EYYkqjD0kah-Sa2rXI44uOUxI", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Асимметричные серьги-подвески с жемчужиной"}, {"id": "1GsCa-ifCZC6h7VJfEq_cSneahDKJYSvo", "sup": "aida", "supName": "Аида", "price": 2500, "desc": "Серьги-каскад с молочными и бордовыми камнями"}, {"id": "1iDKrc4ptIKZ5Y0T5w1KCI50UHxJpP508", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Серьги прямоугольные в стразах"}, {"id": "1j5Us0Dnes4Af9Gk-X04KPFHq2MTcSLwE", "sup": "aida", "supName": "Аида", "price": 2000, "desc": "Серьги в стразах со скользящими камнями"}, {"id": "1iiAEBHvzdFGDdjEDWHakM1INOoWG0nL7", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Цепочка с подвеской бесконечность и сердечко"}, {"id": "10fNZoHx96eaC-ueJe-ElLqXOPF2iz4OI", "sup": "aida", "supName": "Аида", "price": 1200, "desc": "Разомкнутое кольцо с розовыми камнями"}, {"id": "17rxH5rTjqqn3uYO8j6DFzxSFN7HbAbml", "sup": "aida", "supName": "Аида", "price": 1400, "desc": "Кольцо с овальным камнем в ореоле"}, {"id": "18BhJmssmT3BmXFXFA--et9qFBf8SZasG", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Серьги с крупными прозрачными кристаллами"}, {"id": "1-RnjuKlqt7rsW2MhD72ssGWEm_HRMR5v", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Серьги-грозди с жемчугом и стразами"}, {"id": "1XybV1V5FhsdDhCvtByoiIP6ZajJ-kVGt", "sup": "aida", "supName": "Аида", "price": 1800, "desc": "Серьги-узлы золотые"}, {"id": "1vjIpvNM62H_IicKxWyj08UF-6xICJyj3", "sup": "evgenia", "supName": "Евгения", "price": 5168, "desc": "Браслет-цепь золотой с фигурной застёжкой"}, {"id": "1NKv3t3FSvfg4R7GHpR1j807THJW9q0kx", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Широкий кованый браслет, золото"}, {"id": "1dukXoUPIn-ecOhe471AEw1o3C0s-92Bg", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Тонкий жёсткий браслет-гвоздь, золото"}, {"id": "1Bz-VnwhYYeP_gRQRByd1av7f3gjZNjKY", "sup": "evgenia", "supName": "Евгения", "price": 5168, "desc": "Широкий браслет мятой фактуры, золото"}, {"id": "1RUD7uOvc_g7X8YJDJ_dJONIXqg3HTx-I", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Серьги-подвески золотые с камнями"}, {"id": "1Oc0njY1eDTXPWDNO8mRd3v44iqYxPTYa", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Тонкий браслет в стразах с Т-застёжкой"}, {"id": "1eNVyuZwcCIHoeIuHvqvVSLHZlQrObbY7", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Кольцо с зелёным камнем в ореоле страз"}, {"id": "1iewonaX6XcoK9-kT5Sdz07ENj6EZ_1k1", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Серьги-капли прозрачные"}, {"id": "1Hx-HHTBfys_QWCVzdFTncxHiMNQCHds_", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Серьги-цветок с красной эмалью и жемчугом"}, {"id": "1u1jhCdF1SwVrrZNGbk5tivuad6psaX7c", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Тонкий браслет-дорожка в стразах"}, {"id": "1-O3QlNaID8wOxonEBWUz1Ga0bl21nl4s", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Серьги-подвески с розовыми кристаллами"}, {"id": "1_2jZrsqxlvmqYYk7n6u77jeiqDwP3w2V", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Серьги-дорожки в стразах"}, {"id": "15Afbth5sJXWufp1GzrymGZGhjsKJZub8", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Кольцо золотое с камнями"}, {"id": "1nfFP7el26lUTEkfBK2QGdjoch_EFNnLv", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Тонкое кольцо с камнем"}, {"id": "1hjjmX2dDWSkv6C9s40ksbW6nGrXpz9EO", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Кольцо-дорожка с цветными камнями"}, {"id": "1D-yuh_T4YseKj_nPRW3q2cOi-3BV9G7y", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Кольцо с круглым элементом в стразах"}, {"id": "1qyssnEkgTWCVxz6Ej1JFWgGjSYgL2LcO", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Кольцо с сердечком из страз и жемчужиной"}, {"id": "1c1Bpmrne6lT2Bp2e4wdE-TMD3EPJxRfr", "sup": "evgenia", "supName": "Евгения", "price": 3800, "desc": "Крупные серьги-кольца, золото"}, {"id": "1CXFNkdp2nqOiUB2dbpAYGP6nQhJVwa1Q", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Двойные серьги-кольца, золото"}, {"id": "1MKpue2QdPARkxXQBFk1OQTH7S88bH0Kw", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Браслет с розовыми круглыми камнями"}, {"id": "1OS8awiYmTp5-nmB696-fHSjS44Jkimpo", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Браслет-цепь с розовыми камнями"}, {"id": "18lf67uKQUMzMnbZNMtf3DJmRICUzMUW1", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Браслет с чёрными клеверами и золотом"}, {"id": "1XrTtk2mVkxuQWl4I0CJX6fwch58RYOJU", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Теннисный браслет с крупными стразами"}, {"id": "13tb6xXBB3UiZGpw96ggMqfKRFXAnteTs", "sup": "evgenia", "supName": "Евгения", "price": 5168, "desc": "Цепочка с мишкой из страз, розовое золото"}, {"id": "1pGBP_vDKTDEBIV2Bg9eBcB2XAJGLOo3f", "sup": "evgenia", "supName": "Евгения", "price": 4168, "desc": "Браслет с крупными кристаллами"}, {"id": "1X6_yoJaOmuvQ9PjdrjbCkwwxwyXQ_J8p", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Панцирное колье, золото"}, {"id": "1sF6zp2S2qSDDt7PlxMW-5Y8hSvL6YsBE", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Серьги-подвески в стразах"}, {"id": "1df27F6n1OXNNp0v9aDXayof25k3lgAQr", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Серьги-подвески с розовыми стразами"}, {"id": "1woque1JNYdl70953hDLqth0TZ9aegkVz", "sup": "evgenia", "supName": "Евгения", "price": 3168, "desc": "Цепочка с круглой подвеской-глаз"}, {"id": "1DSUYLgrUIUCbkSG_wKCofY1QzUEXXC0P", "sup": "evgenia", "supName": "Евгения", "price": 5168, "desc": "Длинное колье-лариат с узлом в стразах"}, {"id": "1VCF6uXG4Kk57SVlOB5M1R6bbTM8UZtk9", "sup": "evgenia", "supName": "Евгения", "price": 1350, "desc": "Резинка для волос со стразами и бантом"}, {"id": "1GWeykM0OQsgZ14YSMa5xAU1ZLSNqFdIZ", "sup": "evgenia", "supName": "Евгения", "price": 1168, "desc": "Набор резинок-браслетов с жемчугом и стразами"}, {"id": "1XMZy_oAuA6Xzzu46ScTqixSPzGnTWqlY", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1400, "desc": "Золотой браслет с цветами"}, {"id": "1zuw_ukiUWPAEGrrDIB4CvJq5aOWELs6-", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1600, "desc": "Широкое золотое кольцо, мятая фактура"}, {"id": "1XytdvL8Zj-i6IAUhwOqFCUK7YXgyHgw_", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1400, "desc": "Крупное кольцо-цветок, серебро"}, {"id": "1BHoT4cb6U3_S1rKWkcUsA0OCWVgKNA62", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Браслет с цветными сердечками"}, {"id": "1kIhLi2JQq9z1uAal58tFLCRDvVfr6J_3", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2100, "desc": "Браслет с клеверами, золото"}, {"id": "1NDhiJJtAmgA7dzfmbaxbxjslPMTaX4bI", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2100, "desc": "Браслет с клеверами, серебро"}, {"id": "1EiIchPS5OA_N4CveUOiLo_LSiX9ySIch", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Широкое кольцо мятой фактуры, серебро"}, {"id": "1PrH3sDDr5LXLS3O4KwXiLY6mUMA5jfEI", "sup": "nashe", "supName": "Наше · AliExpress", "price": 900, "desc": "Браслет-основа для шармов, серебро"}, {"id": "1-dCL88yGXJ7yLWVfmvnP75riBCNqwAGu", "sup": "nashe", "supName": "Наше · AliExpress", "price": 3600, "desc": "Цепочка с подвеской-мишка в стразах"}, {"id": "1T8ZI_ePndhbjKsMwPGDPmUIOcVZcFyfw", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1600, "desc": "Серьги-протяжки с камнем"}, {"id": "1-qLB9PtoSJluHFQxkyPPLqY7T1bX_-7k", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Тонкое кольцо-змейка, серебро"}, {"id": "1qsqlFHTXZbgAT1sgVrtysQNq7qa35NWp", "sup": "nashe", "supName": "Наше · AliExpress", "price": 3600, "desc": "Набор колец: цветок и узел"}, {"id": "12yldHb6McypukMhJHruFs2KhTjyt4zS2", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2600, "desc": "Кольцо с крупным дымчатым камнем, золото"}, {"id": "1WrnSQZOw_TMTvhNR-jEVmjMllysLwKIr", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2400, "desc": "Золотая печатка с сердцем"}, {"id": "1r2FXBbr_4RCKru4iDhq0MrcFOkL0K_Me", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2600, "desc": "Золотое кольцо с крупной жемчужиной"}, {"id": "1R8lTveMIPHfZXMqqYgmBpAkt36mqO2Ii", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2200, "desc": "Кольца с чёрными камнями, золото"}, {"id": "1kguk8_X3IX3NqnYRuyqEG0lBRZr9pzZW", "sup": "nashe", "supName": "Наше · AliExpress", "price": 3100, "desc": "Разомкнутое золотое кольцо, гладкое"}, {"id": "1HmcLkNGFOP-VjMle6RWdJF7zy8_j9lCd", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2600, "desc": "Кольца с прозрачными камнями"}, {"id": "1atd8qmN4IUN4FP5c4fql3qTek8Zw5NAL", "sup": "nashe", "supName": "Наше · AliExpress", "price": 3200, "desc": "Тонкие серебряные кольца"}, {"id": "1PzsRkCf_THqWq8_dRZ50rrgYpecB-shw", "sup": "nashe", "supName": "Наше · AliExpress", "price": 3400, "desc": "Серебряное кольцо с чёрным камнем"}, {"id": "1xW3gRZlllNSS8CCzP25pGhE3b4hXb6Ja", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Золотое кольцо с жемчужиной"}, {"id": "1NSa7IFHkFFavvBiL04jW9cO7PNJUFblG", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2600, "desc": "Золотое кольцо с барочной жемчужиной"}, {"id": "1ClFGOo-c-nLOCyhtPI5d2gWfA0MlFgiE", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2600, "desc": "Крупное кольцо с барочной жемчужиной"}, {"id": "1OTLBrK7CscgSZONibbZ--A4JkFHjHEly", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Кольцо-сердце, красная эмаль"}, {"id": "1Gp9eBwGJX0GEbLnuRDw1bO3zLu59q3JK", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2500, "desc": "Широкое гладкое кольцо, серебро"}, {"id": "17wxqVenmzVsosmg1o91XqJzyV-N1Gaj-", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Крупное кольцо-веер, золото"}, {"id": "11AAUV2SjRPr5vH_x54d1NY20rpme-CJm", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Крупное кольцо-веер, серебро"}, {"id": "1MDNkY2ZGT6MFG1hyKVKB4lLHL6mJUwIf", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1600, "desc": "Колье с подвеской-глаз в стразах, золото"}, {"id": "1DKlPM9Fv8c9Wr0JKFtfgN38rDbiPhiv2", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Длинная цепь с подвеской, серебро"}, {"id": "1914LXZQMvtojY9sXhcI5J91H6xuBHPqh", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1200, "desc": "Кольцо-цветок, золото"}, {"id": "1isbxY8q2GZt7xOVULBRnh_m7PCWtLj7m", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1600, "desc": "Серьги-лепестки перламутровые"}, {"id": "1TG5E9WPtVJksTG12vzsFzgU6MNn8BjHj", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Серьги-ракушки с жемчугом"}, {"id": "1crDKhW6vlo_XCIHjC0ISyFHJx1CPs4hd", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Набор золотых колец с камнями"}, {"id": "15CNR01dXGvcDb3UJV7CSHuPJCFnJla6q", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2400, "desc": "Колье из прозрачных кристаллов-бусин"}, {"id": "1ltwnl_2GQJoDOB8Vwwg6QJEUCt5UHURg", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1600, "desc": "Колье из страз и жемчуга"}, {"id": "1gX4i8THjsicH5vvRwqr9NINs_Jp8-Ivm", "sup": "nashe", "supName": "Наше · AliExpress", "price": 4600, "desc": "Длинное колье с камнями, серебро"}, {"id": "15w_MZQ3LPVrXCvAjY1Keyswt4fWyWh2h", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2100, "desc": "Цепочка с подвеской-шар из страз"}, {"id": "1C5qIX5pdHZqTlkM3XifdnEVw-L5AVbgA", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Колье с подвеской-бабочка в стразах"}, {"id": "1ZdUW12A-aBFuCoWmeg1yiTSieOL5d7yV", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1400, "desc": "Колье-невидимка со звёздами из страз"}, {"id": "1IezGX7Ny13IauYAtK76zhUluvCZuvjCg", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2100, "desc": "Колье с разноцветными бусинами"}, {"id": "1Hd1Oaw8MuQefIdujWNSQBAYOZQgC4DgY", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2400, "desc": "Колье с разноцветными круглыми камнями"}, {"id": "1aNJQ6fGkC1dHYfPhBhYblwr1trTBLYgC", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1400, "desc": "Цепочка с подвеской-цветок, перламутр"}, {"id": "1iN5ghFc4iZpakFsJ90iySA1BRmjhkofd", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1200, "desc": "Шнурок с подвеской-сердце из стекла"}, {"id": "10jWYVQGK7Y3yxjGa3gU5NHqBFKApRdJC", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1200, "desc": "Цепочка с синим камнем, серебро"}, {"id": "1sWZ48MJ3J_-5quf1v9TYxru3GkkqaFBf", "sup": "nashe", "supName": "Наше · AliExpress", "price": 1800, "desc": "Цепочка с барочной жемчужиной"}, {"id": "11xjgfyk2HOI5yVzFJ7otEsQn76ErpJUM", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2100, "desc": "Тонкая серебряная цепочка с подвеской"}, {"id": "1Cwj1hsy83DxvQk6DA3lfv1C6-03ReTdw", "sup": "nashe", "supName": "Наше · AliExpress", "price": 3200, "desc": "Цепочка с подвеской в стразах"}, {"id": "1knUqkfUhMVwiDe-hc6mWjVwxKytv7i3w", "sup": "nashe", "supName": "Наше · AliExpress", "price": 3100, "desc": "Набор колец: каменные и золотое"}, {"id": "1l6479deZPUFH3j2ji4N_9ll_UpRTgHdx", "sup": "nashe", "supName": "Наше · AliExpress", "price": 2500, "desc": "Кольцо с крупным жёлтым кристаллом"}, {"id": "1mZk1_89HlJGFy8ROR3F0hLVkxKTIHoYA", "sup": "nashe", "supName": "Наше · AliExpress", "price": 4100, "desc": "Тонкое кольцо-дорожка в стразах"}];
+const LS_KEY = 'bb20a_purchases_v1';
+const BUYERS = {master:'Мастер', client:'Клиент мастера', street:'Человек с улицы'};
+
 const SUPS = [
-  {key:'all', name:'Все'},
-  {key:'aida', name:'Аида'},
-  {key:'evgenia', name:'Евгения'},
-  {key:'nashe', name:'Наше · AliExpress'},
+  {key:'all', name:'Все'}, {key:'aida', name:'Аида'},
+  {key:'evgenia', name:'Евгения'}, {key:'nashe', name:'Наше · AliExpress'},
 ];
-const counts = {all: ITEMS.length};
-ITEMS.forEach(i=>counts[i.sup]=(counts[i.sup]||0)+1);
+const supCounts = {all: ITEMS.length};
+ITEMS.forEach(i=>supCounts[i.sup]=(supCounts[i.sup]||0)+1);
+const byId = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
 
-let state = {sup:'all', q:'', sort:'default'};
+let purchases = load();
+function load(){ try{return JSON.parse(localStorage.getItem(LS_KEY))||{};}catch(e){return {};} }
+function persist(){ localStorage.setItem(LS_KEY, JSON.stringify(purchases)); }
 
-const filtersEl = document.getElementById('filters');
-SUPS.forEach(s=>{
-  const b=document.createElement('button');
-  b.className='chip'+(s.key==='all'?' active':'');
-  b.dataset.key=s.key;
-  b.innerHTML=s.name+' <span class="n">'+(counts[s.key]||0)+'</span>';
-  b.onclick=()=>{state.sup=s.key;[...filtersEl.children].forEach(c=>c.classList.toggle('active',c.dataset.key===s.key));render();};
-  filtersEl.appendChild(b);
-});
-
-document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render();});
-document.getElementById('sort').addEventListener('change',e=>{state.sort=e.target.value;render();});
+let view='catalog';
+let cat={sup:'all', q:'', sort:'default'};
+let bought={buyer:'all', from:'', to:''};
 
 const fmt = n => n.toLocaleString('ru-RU');
 const imgUrl = id => 'https://lh3.googleusercontent.com/d/'+id+'=w600';
 const fallback = id => 'https://drive.google.com/thumbnail?id='+id+'&sz=w600';
+const ruDate = iso => { if(!iso) return ''; const [y,m,d]=iso.split('-'); return d+'.'+m+'.'+y; };
 
-const grid=document.getElementById('grid');
-const emptyEl=document.getElementById('empty');
-const metaEl=document.getElementById('meta');
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  view=t.dataset.view;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));
+  document.getElementById('catalogView').classList.toggle('hidden', view!=='catalog');
+  document.getElementById('boughtView').classList.toggle('hidden', view!=='bought');
+  document.getElementById('catControls').classList.toggle('hidden', view!=='catalog');
+  document.getElementById('boughtControls').classList.toggle('hidden', view!=='bought');
+  window.scrollTo(0,0);
+  render();
+});
 
-function render(){
-  let list = ITEMS.filter(i=>
-    (state.sup==='all'||i.sup===state.sup) &&
-    (!state.q || i.desc.toLowerCase().includes(state.q) || i.supName.toLowerCase().includes(state.q))
-  );
-  if(state.sort==='asc') list=[...list].sort((a,b)=>a.price-b.price);
-  else if(state.sort==='desc') list=[...list].sort((a,b)=>b.price-a.price);
+/* ---------- catalog filters ---------- */
+const filtersEl=document.getElementById('filters');
+SUPS.forEach(s=>{
+  const b=document.createElement('button');
+  b.className='chip'+(s.key==='all'?' active':''); b.dataset.key=s.key;
+  b.innerHTML=s.name+' <span class="n">'+(supCounts[s.key]||0)+'</span>';
+  b.onclick=()=>{cat.sup=s.key;[...filtersEl.children].forEach(c=>c.classList.toggle('active',c.dataset.key===s.key));render();};
+  filtersEl.appendChild(b);
+});
+document.getElementById('q').addEventListener('input',e=>{cat.q=e.target.value.trim().toLowerCase();render();});
+document.getElementById('sort').addEventListener('change',e=>{cat.sort=e.target.value;render();});
 
-  metaEl.innerHTML='Показано <b>'+list.length+'</b> из '+ITEMS.length;
-  emptyEl.style.display=list.length?'none':'block';
+/* ---------- bought filters ---------- */
+const buyerFilters=document.getElementById('buyerFilters');
+[['all','Все'],['master','Мастер'],['client','Клиент мастера'],['street','Человек с улицы']].forEach(([k,name])=>{
+  const b=document.createElement('button');
+  b.className='chip'+(k==='all'?' active':''); b.dataset.key=k;
+  b.innerHTML=name+' <span class="n" data-c="'+k+'">0</span>';
+  b.onclick=()=>{bought.buyer=k;[...buyerFilters.children].forEach(c=>c.classList.toggle('active',c.dataset.key===k));render();};
+  buyerFilters.appendChild(b);
+});
+document.getElementById('dateFrom').addEventListener('change',e=>{bought.from=e.target.value;render();});
+document.getElementById('dateTo').addEventListener('change',e=>{bought.to=e.target.value;render();});
+document.getElementById('dateReset').onclick=()=>{bought.from='';bought.to='';document.getElementById('dateFrom').value='';document.getElementById('dateTo').value='';render();};
 
-  grid.innerHTML = list.map(i=>`
-    <article class="card">
-      <div class="ph">
-        <span class="badge">${i.supName.split(' ·')[0]}</span>
-        <img loading="lazy" src="${imgUrl(i.id)}" alt="${i.desc}"
-             onerror="this.onerror=null;this.src='${fallback(i.id)}'">
-      </div>
-      <div class="body">
-        <div class="price">${fmt(i.price)} <span>₽</span></div>
-        <p class="desc">${i.desc}</p>
-      </div>
-    </article>`).join('');
+/* ---------- card builder ---------- */
+function card(i, showBuyer){
+  const p=purchases[i.id];
+  const el=document.createElement('article');
+  el.className='card'+(p?' bought':'');
+  el.onclick=()=>openModal(i);
+  const supShort=i.supName.split(' ·')[0];
+  let tags='';
+  if(p && showBuyer){
+    tags='<div class="tags"><span class="tag '+p.buyer+'">'+BUYERS[p.buyer]+'</span>'+
+         (p.date?'<span class="tag date">'+ruDate(p.date)+'</span>':'')+'</div>';
+  }
+  el.innerHTML=
+    '<div class="ph"><span class="badge">'+supShort+'</span>'+
+    (p?'<span class="sold">✓ Куплено</span>':'')+
+    '<img loading="lazy" src="'+imgUrl(i.id)+'" alt="'+i.desc+'" onerror="this.onerror=null;this.src=\''+fallback(i.id)+'\'"></div>'+
+    '<div class="body"><div class="price">'+fmt(i.price)+' <span>₽</span></div>'+
+    '<p class="desc">'+i.desc+'</p>'+tags+'</div>';
+  return el;
 }
+
+/* ---------- render ---------- */
+function render(){
+  document.getElementById('boughtCount').textContent=Object.keys(purchases).length;
+  if(view==='catalog') renderCatalog(); else renderBought();
+}
+
+function renderCatalog(){
+  let list=ITEMS.filter(i=>
+    (cat.sup==='all'||i.sup===cat.sup) &&
+    (!cat.q || i.desc.toLowerCase().includes(cat.q) || i.supName.toLowerCase().includes(cat.q)));
+  if(cat.sort==='asc') list=[...list].sort((a,b)=>a.price-b.price);
+  else if(cat.sort==='desc') list=[...list].sort((a,b)=>b.price-a.price);
+  const g=document.getElementById('grid'); g.innerHTML='';
+  list.forEach(i=>g.appendChild(card(i,false)));
+  document.getElementById('meta').innerHTML='Показано <b>'+list.length+'</b> из '+ITEMS.length;
+  document.getElementById('empty').classList.toggle('hidden', list.length>0);
+}
+
+function renderBought(){
+  const all=Object.entries(purchases).map(([id,p])=>({item:byId[id],p})).filter(x=>x.item);
+  // update buyer counts
+  const c={all:all.length,master:0,client:0,street:0};
+  all.forEach(x=>c[x.p.buyer]=(c[x.p.buyer]||0)+1);
+  document.querySelectorAll('[data-c]').forEach(n=>n.textContent=c[n.dataset.c]||0);
+
+  let list=all.filter(x=>
+    (bought.buyer==='all'||x.p.buyer===bought.buyer) &&
+    (!bought.from || (x.p.date && x.p.date>=bought.from)) &&
+    (!bought.to   || (x.p.date && x.p.date<=bought.to)));
+  list.sort((a,b)=>(b.p.date||'').localeCompare(a.p.date||''));
+
+  const total=list.reduce((s,x)=>s+x.item.price,0);
+  document.getElementById('summary').innerHTML=
+    '<div class="s"><div class="k">Куплено</div><div class="v">'+list.length+'</div></div>'+
+    '<div class="s"><div class="k">На сумму</div><div class="v">'+fmt(total)+' ₽</div></div>'+
+    '<div class="actions">'+
+      '<button class="btn" id="exportBtn">Скачать данные</button>'+
+      '<button class="btn" id="importBtn">Загрузить</button>'+
+    '</div>';
+  document.getElementById('exportBtn').onclick=exportData;
+  document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+
+  const g=document.getElementById('boughtGrid'); g.innerHTML='';
+  list.forEach(x=>g.appendChild(card(x.item,true)));
+  document.getElementById('boughtMeta').innerHTML=list.length?('Показано <b>'+list.length+'</b>'):'';
+  document.getElementById('boughtEmpty').classList.toggle('hidden', list.length>0);
+  if(!all.length){ document.getElementById('summary').classList.add('hidden'); }
+  else document.getElementById('summary').classList.remove('hidden');
+}
+
+/* ---------- modal ---------- */
+let current=null, selBuyer=null;
+const overlay=document.getElementById('overlay');
+function openModal(i){
+  current=i;
+  const p=purchases[i.id];
+  document.getElementById('mImg').src=imgUrl(i.id);
+  document.getElementById('mPrice').innerHTML=fmt(i.price)+' <span>₽</span>';
+  document.getElementById('mDesc').textContent=i.desc;
+  document.getElementById('mSup').textContent=i.supName;
+  document.getElementById('mTitle').textContent=p?'Покупка отмечена':'Отметить покупку';
+  document.getElementById('mDate').value=p?p.date:todayISO();
+  selBuyer=p?p.buyer:null;
+  document.querySelectorAll('#mBuyers button').forEach(b=>b.classList.toggle('sel',b.dataset.b===selBuyer));
+  document.getElementById('mDelete').classList.toggle('hidden', !p);
+  document.getElementById('mSave').textContent=p?'Сохранить изменения':'Сохранить покупку';
+  overlay.classList.add('open');
+}
+function closeModal(){overlay.classList.remove('open');current=null;}
+document.getElementById('modalClose').onclick=closeModal;
+overlay.onclick=e=>{if(e.target===overlay)closeModal();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.querySelectorAll('#mBuyers button').forEach(b=>b.onclick=()=>{
+  selBuyer=b.dataset.b;
+  document.querySelectorAll('#mBuyers button').forEach(x=>x.classList.toggle('sel',x===b));
+});
+document.getElementById('mSave').onclick=()=>{
+  if(!current) return;
+  const date=document.getElementById('mDate').value;
+  if(!date){toast('Укажите дату покупки');return;}
+  if(!selBuyer){toast('Выберите, кто купил');return;}
+  purchases[current.id]={date, buyer:selBuyer};
+  persist(); closeModal(); render();
+  toast('Отмечено: куплено');
+};
+document.getElementById('mDelete').onclick=()=>{
+  if(!current) return;
+  delete purchases[current.id];
+  persist(); closeModal(); render();
+  toast('Покупка отменена');
+};
+function todayISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+
+/* ---------- export / import ---------- */
+function exportData(){
+  const blob=new Blob([JSON.stringify(purchases,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='bb20a-kuplennoe-'+todayISO()+'.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('Файл с данными скачан');
+}
+document.getElementById('importFile').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const obj=JSON.parse(r.result);
+      let added=0;
+      Object.entries(obj).forEach(([id,p])=>{ if(byId[id] && p && p.date && p.buyer){purchases[id]=p;added++;} });
+      persist(); render();
+      toast('Загружено записей: '+added);
+    }catch(err){ toast('Не удалось прочитать файл'); }
+    e.target.value='';
+  };
+  r.readAsText(f);
+});
+
+/* ---------- toast ---------- */
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
 render();
 </script>
 </body>
