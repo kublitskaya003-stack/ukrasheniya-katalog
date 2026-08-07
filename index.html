@@ -157,6 +157,11 @@
   .buyers button.sel[data-b=master]{background:var(--master-bg);border-color:var(--master);color:var(--master)}
   .buyers button.sel[data-b=client]{background:var(--client-bg);border-color:var(--client);color:var(--client)}
   .buyers button.sel[data-b=street]{background:var(--street-bg);border-color:var(--street);color:var(--street)}
+  .sups{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .sups button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 6px;font-size:12.5px;
+    font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;color:var(--ink);line-height:1.25}
+  .sups button:hover{border-color:#cfcfcf}
+  .sups button.sel{background:var(--ink);border-color:var(--ink);color:#fff}
   .admins{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .admins button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 6px;font-size:13px;
     font-weight:600;cursor:pointer;transition:.15s;font-family:inherit;color:var(--ink)}
@@ -188,6 +193,7 @@
     .summary{gap:16px 22px;padding:16px}
     .summary .actions{margin-left:0;flex-basis:100%}
     .buyers button{font-size:11.5px}
+    .sups button{font-size:11.5px}
   }
 </style>
 </head>
@@ -318,6 +324,14 @@
     <div class="form">
       <h3 id="cTitle">Добавить продажу без фото</h3>
       <div class="field">
+        <label>Поставщик</label>
+        <div class="sups" id="cSups">
+          <button type="button" data-s="aida">Аида</button>
+          <button type="button" data-s="evgenia">Евгения</button>
+          <button type="button" data-s="nashe">Наше · AliExpress</button>
+        </div>
+      </div>
+      <div class="field">
         <label>Сумма продажи, ₽</label>
         <input type="number" id="cPrice" min="0" step="50" inputmode="numeric" placeholder="например, 2500">
       </div>
@@ -379,22 +393,27 @@ ITEMS.forEach(i=>supCounts[i.sup]=(supCounts[i.sup]||0)+1);
 const byId = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
 
 /* ---------- позиции без фото (заведены вручную) ----------
-   Такая продажа лежит в той же общей базе, что и остальные: цена и описание
-   упакованы прямо в item_id, поэтому серверную часть менять не пришлось.
-   Формат id: custom|<uid>|<цена>|<описание>                                   */
+   Такая продажа лежит в той же общей базе, что и остальные: поставщик, цена и
+   описание упакованы прямо в item_id, поэтому серверную часть менять не пришлось.
+   Формат id: custom|<uid>|<поставщик>|<цена>|<описание>                        */
 const CUSTOM_PREFIX = 'custom|';
+const SUP_NAMES = {aida:'Аида', evgenia:'Евгения', nashe:'Наше · AliExpress'};
 const isCustom   = id => typeof id==='string' && id.indexOf(CUSTOM_PREFIX)===0;
 const customUid  = id => id.split('|')[1] || '';
 function customItem(id){
   const parts=id.split('|');
-  return {id, sup:'custom', supName:'Без фото · вручную', custom:true,
-          price:Number(parts[2])||0,
-          desc:(parts.slice(3).join('|').trim()||'Без описания')};
+  // старый формат (без поставщика) — на случай записей, заведённых до этой правки
+  const hasSup = Object.prototype.hasOwnProperty.call(SUP_NAMES, parts[2]);
+  const sup    = hasSup ? parts[2] : 'other';
+  const rest   = hasSup ? parts.slice(3) : parts.slice(2);   // <цена>|<описание>
+  return {id, sup, supName:(SUP_NAMES[sup]||'Без поставщика'), custom:true,
+          price:Number(rest[0])||0,
+          desc:(rest.slice(1).join('|').trim()||'Без описания')};
 }
-function customId(price, desc, uid){
+function customId(sup, price, desc, uid){
   uid = uid || (Date.now().toString(36)+Math.random().toString(36).slice(2,6));
   const clean = String(desc).replace(/[|\r\n\t]+/g,' ').replace(/\s+/g,' ').trim();
-  return CUSTOM_PREFIX+uid+'|'+Math.round(price)+'|'+clean;
+  return CUSTOM_PREFIX+uid+'|'+sup+'|'+Math.round(price)+'|'+clean;
 }
 /* Позиция по id: из каталога либо собранная из id, если фото не было. */
 const itemOf = id => byId[id] || (isCustom(id) ? customItem(id) : null);
@@ -555,7 +574,7 @@ document.getElementById('sort').addEventListener('change',e=>{cat.sort=e.target.
 
 /* ---------- bought filters ---------- */
 const buyerFilters=document.getElementById('buyerFilters');
-[['all','Все'],['aida','Аида'],['evgenia','Евгения'],['nashe','Наше · AliExpress'],['custom','Без фото']].forEach(([k,name])=>{
+[['all','Все'],['aida','Аида'],['evgenia','Евгения'],['nashe','Наше · AliExpress']].forEach(([k,name])=>{
   const b=document.createElement('button');
   b.className='chip'+(k==='all'?' active':''); b.dataset.key=k;
   b.innerHTML=name+' <span class="n" data-c="'+k+'">0</span>';
@@ -615,7 +634,7 @@ function renderCatalog(){
 function renderBought(){
   const all=Object.entries(purchases).map(([id,p])=>({item:itemOf(id),p})).filter(x=>x.item);
   // update supplier counts among purchased
-  const c={all:all.length,aida:0,evgenia:0,nashe:0,custom:0};
+  const c={all:all.length,aida:0,evgenia:0,nashe:0};
   all.forEach(x=>c[x.item.sup]=(c[x.item.sup]||0)+1);
   document.querySelectorAll('[data-c]').forEach(n=>n.textContent=c[n.dataset.c]||0);
 
@@ -630,7 +649,8 @@ function renderBought(){
     '<div class="s"><div class="k">Куплено</div><div class="v">'+list.length+'</div></div>'+
     '<div class="s"><div class="k">На сумму</div><div class="v">'+fmt(total)+' ₽</div></div>'+
     '<div class="actions">'+
-      '<button class="btn add" id="addCustomBtn">+ Продажа без фото</button>'+
+      '<button class="btn add" id="addCustomBtn">+ Продажа без фото'+
+        (SUP_NAMES[bought.sup]?' · '+SUP_NAMES[bought.sup]:'')+'</button>'+
       '<button class="btn" id="exportBtn">Скачать данные</button>'+
       '<button class="btn" id="importBtn">Загрузить</button>'+
     '</div>';
@@ -697,13 +717,16 @@ document.getElementById('mDelete').onclick=()=>{
 function todayISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 
 /* ---------- модалка «продажа без фото» ---------- */
-let editingCustom=null, cBuyer=null, cAdmin=null;
+let editingCustom=null, cSup=null, cBuyer=null, cAdmin=null;
 const cOverlay=document.getElementById('customOverlay');
 
-/* i === null — заводим новую позицию, иначе редактируем уже заведённую. */
+/* i === null — заводим новую позицию, иначе редактируем уже заведённую.
+   У новой поставщик подставляется из активного фильтра «Купленного».     */
 function openCustom(i){
   editingCustom=i||null;
   const p=i?purchases[i.id]:null;
+  cSup = i ? (SUP_NAMES[i.sup]?i.sup:null) : (SUP_NAMES[bought.sup]?bought.sup:null);
+  document.querySelectorAll('#cSups button').forEach(b=>b.classList.toggle('sel',b.dataset.s===cSup));
   document.getElementById('cTitle').textContent=i?'Продажа без фото':'Добавить продажу без фото';
   document.getElementById('cPrice').value=i?i.price:'';
   document.getElementById('cDesc').value=i?i.desc:'';
@@ -720,6 +743,10 @@ function openCustom(i){
 function closeCustom(){cOverlay.classList.remove('open');editingCustom=null;}
 document.getElementById('customClose').onclick=closeCustom;
 cOverlay.onclick=e=>{if(e.target===cOverlay)closeCustom();};
+document.querySelectorAll('#cSups button').forEach(b=>b.onclick=()=>{
+  cSup=b.dataset.s;
+  document.querySelectorAll('#cSups button').forEach(x=>x.classList.toggle('sel',x===b));
+});
 document.querySelectorAll('#cBuyers button').forEach(b=>b.onclick=()=>{
   cBuyer=b.dataset.b;
   document.querySelectorAll('#cBuyers button').forEach(x=>x.classList.toggle('sel',x===b));
@@ -732,12 +759,13 @@ document.getElementById('cSave').onclick=()=>{
   const price=Math.round(Number(String(document.getElementById('cPrice').value).replace(',','.')));
   const desc=document.getElementById('cDesc').value.replace(/[|\r\n\t]+/g,' ').replace(/\s+/g,' ').trim();
   const date=document.getElementById('cDate').value;
+  if(!cSup){toast('Выберите поставщика');return;}
   if(!price||price<=0){toast('Укажите сумму продажи');return;}
   if(!desc){toast('Добавьте краткое описание украшения');return;}
   if(!date){toast('Укажите дату продажи');return;}
   if(!cBuyer){toast('Выберите, кто купил');return;}
   if(!cAdmin){toast('Выберите администратора');return;}
-  const id=customId(price, desc, editingCustom?customUid(editingCustom.id):null);
+  const id=customId(cSup, price, desc, editingCustom?customUid(editingCustom.id):null);
   // цена и описание зашиты в id, поэтому при их правке старая запись удаляется
   if(editingCustom && editingCustom.id!==id) removePurchase(editingCustom.id);
   savePurchase(id, {date, buyer:cBuyer, admin:cAdmin});
